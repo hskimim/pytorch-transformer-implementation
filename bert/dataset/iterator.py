@@ -9,8 +9,8 @@ import pandas as pd # to load pickle
 
 class BertIterator(Dataset) : 
     def __init__(self,
-                filename = 'data/prep_docs.txt',
-                lemma_dict_path = 'data/lemma_dict.pickle',
+                filename = '../data/prep_train.txt',
+                tokenizer_model_path = '../data/m.model',
                  seq_len=256,
                 in_memory=True) : 
         
@@ -18,7 +18,7 @@ class BertIterator(Dataset) :
             NotImplementedError("Only in-memory version is supported")
             
         self.docs = self._load_txt_in_memory(filename)
-        self.prep = p.TxtProcessor(lemma_dict_path)
+        self.prep = p.TxtProcessor(tokenizer_model_path)
         self.seq_len = seq_len
         
     def __len__(self) : 
@@ -54,24 +54,23 @@ class BertIterator(Dataset) :
             return txt2        
     
     def _generate_mask(self, txt) : 
-        wi = self.prep.preprocess(txt)
+        wi = np.array(self.prep.preprocess(txt))
         
         # random-sampling mask targeted index
         index_arr = np.arange(len(wi))
         np.random.shuffle(index_arr)
         index_arr = index_arr[:int(index_arr.shape[0]*0.15)]
-        
+
         mask_label = np.zeros(len(wi))
         mask_label[index_arr] = wi[index_arr]
         
         # seperate mask targeted index into 3 conditions
         mask_idx_arr = index_arr[:int(len(index_arr)*0.8)]
         replace_idx_arr = index_arr[int(len(index_arr)*0.8):int(len(index_arr)*0.9)]
-        unchanged_idx_arr = index_arr[int(len(index_arr)*0.9):]
-        
+
         # apply masking
         wi[mask_idx_arr] = self.prep.mask_id        
-        random_alloc_wi = np.random.randint(5, len(self.prep.lemma_dict), size=replace_idx_arr.shape[0])        
+        random_alloc_wi = np.random.randint(5, self.prep.vocab_size, size=replace_idx_arr.shape[0])        
         wi[replace_idx_arr] = random_alloc_wi
         
         return wi, mask_label
@@ -79,12 +78,10 @@ class BertIterator(Dataset) :
     def _generate_nsp(self, wi, label) : 
         p = random.random()
         if p > 0.5 : # NotNext
-            
             rand_sample_idx = np.random.randint(low=5, high=self.length, size=1).item()
             txt = self._sample_txt_from_line(idx=rand_sample_idx, get_pair=False)
             wi, label = self._generate_mask(txt)
             return wi, label, self.prep.nsp_label['NotNext']
-            
         return wi, label, self.prep.nsp_label['IsNext']
 
     def _concat_sequences(self, wi1, wi2, is_mlm=False) : 
@@ -95,12 +92,12 @@ class BertIterator(Dataset) :
             cated = cated[:self.seq_len] # list type
             padded = torch.tensor(cated + [self.prep.pad_id] * pad_length).long().contiguous()
             
-            seg = [0] * (len(wi1) + 2) + [1] * (len(wi2)+1)
+            seg = [1] * (len(wi1) + 2) + [2] * (len(wi2)+1)
             seg = seg[:self.seq_len] # list type
             seg = torch.tensor(seg + [self.prep.pad_id] * pad_length).long().contiguous()
             
             return padded, seg
-        else : 
+        else : # padding for mlm label array
             cated = [0] + wi1.tolist() + [0] + wi2.tolist() + [0]
             cated = cated[:self.seq_len] # list type
             padded = torch.tensor(cated + [0] * pad_length).long().contiguous()            

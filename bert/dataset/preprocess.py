@@ -5,22 +5,14 @@ import numpy as np
 class TxtProcessor() : 
     def __init__(self, tokenizer_model_path = '../data/m.model') : 
         self.sp = spm.SentencePieceProcessor()
-        self.sp.Load('../data/m.model')
+        self.sp.Load(tokenizer_model_path)
         self._nsp_label = {'IsNext':1, 'NotNext':0}
+        self.vocab_size = self.sp.vocab_size()
         
-    def _wi_map(self, word) : 
-        return self._lemma_dict.get(word, self._lemma_dict['<unk>'])
-    
-    def sent_tokenize(self, txt) : 
-        tokens = self.tokenizer(txt)
-        return tokens
-    
-    def word_indexing(self, word) : 
-        return self._wi_map(word)
-    
     def preprocess(self, txt) : 
-        tokens = self.sent_tokenize(txt)
-        wi_arr = np.vectorize(self._wi_map)(tokens)
+        wi_arr = self.sp.EncodeAsIds(txt)[1:] 
+        # there is always whitespace in 1st index of wi arr
+        
         return wi_arr
     
     @property
@@ -29,23 +21,23 @@ class TxtProcessor() :
     
     @property
     def mask_id(self) : 
-        return self._lemma_dict['<mask>']
+        return self.sp.PieceToId('[MASK]')
     
     @property
     def unk_id(self) : 
-        return self._lemma_dict['<unk>']
+        return self.sp.unk_id()
 
     @property
     def pad_id(self) : 
-        return self._lemma_dict['<pad>']
+        return self.sp.pad_id()
 
     @property
     def sep_id(self) : 
-        return self._lemma_dict['<sep>']
+        return self.sp.PieceToId('[SEP]')
     
     @property
     def cls_id(self) : 
-        return self._lemma_dict['<cls>']
+        return self.sp.PieceToId('[CLS]')
     
     @property
     def nsp_label(self) : 
