@@ -1,6 +1,5 @@
 import sentencepiece as spm
-import pandas as pd # to load pickle
-import numpy as np
+
 
 class TxtProcessor() : 
     def __init__(self, tokenizer_model_path = '../data/m.model') : 
@@ -12,33 +11,28 @@ class TxtProcessor() :
     def preprocess(self, txt) : 
         wi_arr = self.sp.EncodeAsIds(txt)[1:] 
         # there is always whitespace in 1st index of wi arr
-        
         return wi_arr
-    
+
     @property
-    def lemma_dict(self) : 
-        return self._lemma_dict
-    
-    @property
-    def mask_id(self) : 
+    def mask_id(self) :
         return self.sp.PieceToId('[MASK]')
-    
+
     @property
-    def unk_id(self) : 
+    def unk_id(self) :
         return self.sp.unk_id()
 
     @property
-    def pad_id(self) : 
+    def pad_id(self) :
         return self.sp.pad_id()
 
     @property
-    def sep_id(self) : 
+    def sep_id(self) :
         return self.sp.PieceToId('[SEP]')
-    
+
     @property
-    def cls_id(self) : 
+    def cls_id(self) :
         return self.sp.PieceToId('[CLS]')
-    
+
     @property
-    def nsp_label(self) : 
+    def nsp_label(self) :
         return self._nsp_label
