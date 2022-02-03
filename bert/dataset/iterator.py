@@ -52,7 +52,8 @@ class BertIterator(Dataset) :
         else : 
             return txt2        
     
-    def _generate_mask(self, txt) : 
+    def _generate_mask(self, txt) :
+        """Dynamic-masking"""
         wi = np.array(self.prep.preprocess(txt))
         
         # random-sampling mask targeted index
@@ -71,10 +72,10 @@ class BertIterator(Dataset) :
         wi[mask_idx_arr] = self.prep.mask_id
         random_alloc_wi = np.random.randint(low=0, high=self.prep.vocab_size, size=replace_idx_arr.shape[0])
         wi[replace_idx_arr] = random_alloc_wi
-        
+
         return wi, mask_label
 
-    def _generate_nsp(self, wi, label) : 
+    def _generate_nsp(self, wi, label) :
         p = random.random()
         if p > 0.5 : # NotNext
             rand_sample_idx = np.random.randint(low=0, high=self.length, size=1).item()
