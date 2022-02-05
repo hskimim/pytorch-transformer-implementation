@@ -1,6 +1,6 @@
 import torch.nn as nn
 from transformer.attention.sdp import ScaledDotProductAttention
-from gpt1.attention.mult_head_attn import MultiHeadAttention
+from transformer.attention.mult_head_attn import MultiHeadAttention
 from transformer.sublayers.residual_connection import PostProcessing
 from transformer.sublayers.point_wise_ffn import PositionwiseFFN
 
