@@ -1,4 +1,5 @@
 import int as int
+import str as str
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -50,6 +51,7 @@ class Pretrain :
                                               seq_len=self._seq_len)
         self._valid_dataloader = DataLoader(self._valid_dataset, batch_size=self._batch_size, shuffle=True)
         self._load_data = True
+
 
     def load_model(self, model):
         assert self._load_data, "load_data() should be first"

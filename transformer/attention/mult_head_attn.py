@@ -1,13 +1,12 @@
 import torch.nn as nn
 
 class MultiHeadAttention(nn.Module):
-    def __init__(self, d_model, seq_length, n_head):
+    def __init__(self, d_model, n_head):
         super().__init__()
         assert d_model % n_head == 0, f"n_head({n_head}) does not divide d_model({d_model})"
 
         self.n_div_head = d_model // n_head
         self.d_model = d_model
-        self.seq_len = seq_length
         self.n_head = n_head
 
         self.Q = nn.Linear(d_model, d_model)
@@ -19,7 +18,8 @@ class MultiHeadAttention(nn.Module):
         return div
 
     def forward(self, emb, enc_inputs=None):
-        q = self.div_and_sort_for_multiheads(self.Q(emb), self.seq_len)
+        seq_len = emb.shape[1]
+        q = self.div_and_sort_for_multiheads(self.Q(emb), seq_len)
 
         if enc_inputs is not None:  # enc-dec attention
             seq_len = enc_inputs.shape[1]  # takes target sequence length for k and v

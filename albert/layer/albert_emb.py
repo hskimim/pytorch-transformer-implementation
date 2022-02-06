@@ -15,7 +15,7 @@ class ALBERT(nn.Module):
 
         self.embber = InputEmbedding(vocab_size, seq_length, d_model)
 
-        enc = EncoderLayer(vocab_size, seq_length, d_model, d_ff, n_head, dropout_p)
+        enc = EncoderLayer(vocab_size, d_model, d_ff, n_head, dropout_p)
 
         self.enc = nn.ModuleList([enc for _ in range(n_enc_layer)])  # parameter-sharing
 

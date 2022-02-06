@@ -5,10 +5,10 @@ from bert.sublayers.residual_connection import PostProcessing
 from bert.sublayers.point_wise_ffn import PositionwiseFFN
 
 class EncoderLayer(nn.Module):
-    def __init__(self, seq_length, d_model, d_ff, n_head, dropout_p):
+    def __init__(self, d_model, d_ff, n_head, dropout_p):
         super().__init__()
 
-        self.ma = MultiHeadAttention(d_model, seq_length, n_head)
+        self.ma = MultiHeadAttention(d_model, n_head)
         self.sdp = ScaledDotProductAttention(d_model)
 
         self.pp1 = PostProcessing(d_model, dropout_p)

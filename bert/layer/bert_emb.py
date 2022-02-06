@@ -17,7 +17,7 @@ class BERT(nn.Module):
 
         self.embber = InputEmbedding(vocab_size, seq_length, d_model, pad_id)
 
-        enc = EncoderLayer(seq_length, d_model, d_ff, n_head, dropout_p)
+        enc = EncoderLayer(d_model, d_ff, n_head, dropout_p)
 
         self.enc = nn.ModuleList([deepcopy(enc) for _ in range(n_enc_layer)])
 
