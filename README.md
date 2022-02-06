@@ -20,3 +20,4 @@ ____________
 
 4. [ALBERT](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/albert)
 
+5. [Set-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/set_transformer)
