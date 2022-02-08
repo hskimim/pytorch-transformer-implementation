@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 import math
 
@@ -10,7 +11,13 @@ class InputEmbedding(nn.Module):
 
     def generate_enc_mask_m(self, input_set):
         mask_m = (input_set != self.pad_idx).unsqueeze(1).unsqueeze(2)
-        return mask_m
+        return self.convert_mask_to_sum_form(mask_m)
+
+    def convert_mask_to_sum_form(self, mask_m):
+        sum_form = torch.empty_like(mask_m)
+        sum_form[mask_m == 0] = float("-inf")
+        sum_form[mask_m == 1] = 0
+        return sum_form
 
     def forward(self, x):
         # x : input_set, [batch_size, seq_length]

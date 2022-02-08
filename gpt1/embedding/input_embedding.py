@@ -14,7 +14,13 @@ class InputEmbedding(nn.Module) :
     def generate_dec_mask_m(self, src) :
         src_len = src.shape[1]
         src_sub_mask = torch.tril(torch.ones((src_len, src_len)), diagonal=0).bool().to(src.device) # mask subsequent token
-        return src_sub_mask
+        return self.convert_mask_to_sum_form(src_sub_mask)
+
+    def convert_mask_to_sum_form(self, mask_m):
+        sum_form = torch.empty_like(mask_m)
+        sum_form[mask_m == 0] = float("-inf")
+        sum_form[mask_m == 1] = 0
+        return sum_form
 
     def forward(self, x) :
         emb = self.tok_emb(x)
