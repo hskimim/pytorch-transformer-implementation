@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import math
 
+# newly implemented apart from transformer's since it is for variable length of sequence. (it is applied at mask_m generate part)
+
 class InputEmbedding(nn.Module) :
     def __init__(self, vocab_size, max_length, d_model) :
         super().__init__()

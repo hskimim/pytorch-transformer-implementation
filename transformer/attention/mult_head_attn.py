@@ -15,6 +15,7 @@ class MultiHeadAttention(nn.Module):
 
     def div_and_sort_for_multiheads(self, projected, seq_len):
         div = projected.view(projected.shape[0], self.n_head, seq_len, self.n_div_head)
+        # [batch-size, n-heads, seq-length,d-model/n-heads]
         return div
 
     def forward(self, emb, enc_inputs=None):
@@ -26,7 +27,7 @@ class MultiHeadAttention(nn.Module):
             k = self.div_and_sort_for_multiheads(self.K(enc_inputs), seq_len)
             v = self.div_and_sort_for_multiheads(self.V(enc_inputs), seq_len)
         else:  # self-attention
-            k = self.div_and_sort_for_multiheads(self.K(emb), self.seq_len)
-            v = self.div_and_sort_for_multiheads(self.V(emb), self.seq_len)
+            k = self.div_and_sort_for_multiheads(self.K(emb), seq_len)
+            v = self.div_and_sort_for_multiheads(self.V(emb), seq_len)
 
         return q, k, v
