@@ -12,7 +12,8 @@ class ScaledDotProductAttention(nn.Module):
         score = torch.matmul(q, k.permute(0, 1, 3, 2).contiguous()) / math.sqrt(self.d_model)
         # [batch-size, n-heads, seq-length, seq-length]
         if mask is not None :
-            score = score.masked_fill(mask == 0, -1e10)
+            score += mask.to(score.device)
+            # score = score.masked_fill(mask.to(score.device) == 0, float("-inf"))
         scaled_score = torch.softmax(score, dim=-1)
 
         attention = torch.matmul(scaled_score, v).permute(0, 2, 3, 1).contiguous()
