@@ -52,6 +52,6 @@ class Encoder(nn.Module):
             mask_m = self.mask_m
 
         for enc_layer in self.enc:
-            h = h + checkpoint(enc_layer, h, mask_m)
+            h = h + enc_layer(h, mask_m)
 
-        return checkpoint(self.final_act(h))
+        return checkpoint(self.final_act, h)

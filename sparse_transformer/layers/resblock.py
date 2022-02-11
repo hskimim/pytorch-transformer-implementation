@@ -1,4 +1,6 @@
 import torch.nn as nn
+from torch.utils.checkpoint import checkpoint
+
 from transformer.attention.sdp import ScaledDotProductAttention
 from transformer.attention.mult_head_attn import MultiHeadAttention
 from transformer.sublayers.residual_connection import PostProcessing
@@ -27,9 +29,9 @@ class Resblock(nn.Module):
 
         h = self.ln(h)
         q, k, v = self.ma(h)
-        a = self.sdp(q, k, v, mask=mask_m) # a(H)
+        a = checkpoint(self.sdp, q, k, v, mask_m) # a(H)
 
         a = self.norm(h, self.dp1(a))
-        b = self.dp2(self.ff(a)) # b(H)
+        b = self.dp2(checkpoint(self.ff, a)) # b(H)
 
         return a + b # a(H) + b(H)
