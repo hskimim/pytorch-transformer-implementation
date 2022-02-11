@@ -1,5 +1,7 @@
 from copy import deepcopy
+
 import torch.nn as nn
+from torch.utils.checkpoint import checkpoint
 
 from sparse_transformer.embedding.input_embedding import InputEmbedding
 from sparse_transformer.layers.resblock import Resblock
@@ -27,8 +29,8 @@ class Encoder(nn.Module):
         self.embeddings = InputEmbedding(vocab_size, max_length, d_model)
         enc = Resblock(d_model, d_ff, n_head, dropout_p)
         self.enc = nn.ModuleList([deepcopy(enc) for _ in range(n_enc_layer)])
-        self.fc = nn.Linear(d_model, vocab_size)
-        self.norm = nn.LayerNorm(d_model)
+        self.final_act = nn.Sequential(nn.LayerNorm(d_model), nn.Linear(d_model, vocab_size))
+        self.seq_len = max_length
         self.l = l
 
         if attn_typ == 'fixed' :
@@ -39,12 +41,17 @@ class Encoder(nn.Module):
             self.fa = FullFA(l, n_head)
         else :
             raise ValueError("Not implemented yet")
+        self.mask_m = self.fa.generate_multi_head_attn_mask(seq_len=max_length)
 
     def forward(self, src):
         h = self.embeddings(src, self.l)
-        mask_m = self.fa.generate_multi_head_attn_mask(seq_len=h.shape[1])
+
+        if h.shape[1] != self.seq_len :
+            mask_m = self.fa.generate_multi_head_attn_mask(seq_len=h.shape[1])
+        else :
+            mask_m = self.mask_m
 
         for enc_layer in self.enc:
-            h = h + enc_layer(h, mask_m) # H_{k-1} + resblock(H_{k-1})
+            h = h + checkpoint(enc_layer, h, mask_m)
 
-        return self.fc(self.norm(h))
+        return checkpoint(self.final_act(h))
