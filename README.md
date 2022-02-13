@@ -23,3 +23,5 @@ ____________
 5. [Set-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/set_transformer)
 
 6. [Sparse-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/sparse_transformer)
+
+7. [Linformer (on progress)](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linformer)
