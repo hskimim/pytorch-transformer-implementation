@@ -9,18 +9,6 @@ class MultiHeadAttention(nn.Module):
         self.n_div_head = d_model // n_head
         self.d_model = d_model
         self.n_head = n_head
-        self.k = k # TODO : supports appropriate k for make linformer to have linear complexity
-
-        self.Q = nn.Linear(d_model, d_model)
-        self.K = nn.Linear(d_model, d_model)
-        self.V = nn.Linear(d_model, d_model)
-        self.E = nn.Linear(seq_length, k)
-        self.F = nn.Linear(seq_length, k)
-
-        self.F.weight.requires_grad = False
-        self.F.bias.requires_grad = False
-        self.F.weight.requires_grad = False
-        self.F.bias.requires_grad = False
 
     def div_and_sort_for_multiheads(self, projected, seq_len):
         div = projected.view(projected.shape[0], self.n_head, seq_len, self.n_div_head)
