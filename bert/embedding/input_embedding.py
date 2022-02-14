@@ -11,13 +11,7 @@ class InputEmbedding(nn.Module):
 
     def generate_enc_mask_m(self, src):
         mask_m = (src != 0).unsqueeze(1).unsqueeze(2)
-        return self.convert_mask_to_sum_form(mask_m)
-
-    def convert_mask_to_sum_form(self, mask_m):
-        sum_form = torch.empty_like(mask_m)
-        sum_form[mask_m == 0] = float("-inf")
-        sum_form[mask_m == 1] = 0
-        return sum_form
+        return mask_m
 
     def forward(self, txt, seg):
         emb = self.tok_emb(txt)
