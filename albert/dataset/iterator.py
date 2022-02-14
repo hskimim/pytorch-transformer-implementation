@@ -1,7 +1,4 @@
 from bert.dataset.iterator import BertIterator
-from bert.dataset import preprocess as p
-
-import torch
 
 import numpy as np
 import random
