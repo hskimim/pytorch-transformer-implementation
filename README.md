@@ -24,4 +24,4 @@ ____________
 
 6. [Sparse-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/sparse_transformer)
 
-7. [Linformer (on progress)](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linformer)
+7. [Linformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linformer)
