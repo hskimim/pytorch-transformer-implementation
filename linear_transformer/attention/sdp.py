@@ -3,7 +3,7 @@ import torch.nn as nn
 
 from linear_transformer.feature_map.kernels import EluFeatureMap
 
-class ScaledDotProductAttention(nn.Module):
+class LinearScaledDotProductAttention(nn.Module):
     def __init__(self, d_model):
         super().__init__()
         self.d_model = d_model
@@ -16,16 +16,17 @@ class ScaledDotProductAttention(nn.Module):
         q = self.pi(q)
         k = self.pi(k)
 
-        # apply mask to k
-        if mask is not None:  # TODO : make attention mask be matched with k's dimension
-            k += mask.to(k.device)
-
         deno = 1 / (torch.einsum('bhne,bhne->bhn', q, k.cumsum(2)) + self.eps)  # [batch-size, n-heads, seq-length]
         # k.cumsum(2) = Z, since z_{i} = z_{i-1} + pi(x_{i} * W_{K} (=projection of K)
 
-        s = torch.einsum('bhne,bhnv->bhnev', k, v)  # outer product, pi(K) * V.T
-        num = torch.einsum('bhne,bhnev->bhnv', q, s.cumsum(2))  # [batch-size, n-heads, seq-length, d_model//h-heads]
-        # s_{i} = s_{i-1} + pi(x_{i} * W_{k}) * (x_{i} * W_{v})
+        seq_length = q.shape[2]
+        mem = []
+        for idx in range(seq_length): # TODO : accelerate the loop operation
+            s_i = torch.einsum('bhe,bhv->bhev', k[:, :, :idx + 1].sum(2), v[:, :, :idx + 1].sum(2))
+            # s_{i} = s_{i-1} + pi(x_{i} * W_{k}) * (x_{i} * W_{v})^{T}
+            num_i = torch.einsum('bhe,bhev->bhv', q[:, :, idx], s_i).unsqueeze(2)
+            mem.append(num_i)
+        num = torch.cat(mem, dim=2)
 
         attention = num / deno.unsqueeze(-1)
         attention = attention.permute(0, 2, 1, 3).contiguous()
