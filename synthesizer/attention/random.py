@@ -11,12 +11,13 @@ class RandomSynthesizer(nn.Module):
         self.n_head = n_head
 
         # randomly initialized matrix R_{h,l}
+        # TODO : how can I make R trainable?
         if k is None :
-            self.R = nn.Parameter(torch.randn(n_head, n, n), requires_grad=True)
+            self.R = nn.Parameter(torch.randn(n_head, n, n), requires_grad=False)
         else :
             # factorization is applied O(n**2) -> O(2*n*K)
-            a = nn.Parameter(torch.randn(n_head, n, k), requires_grad=True)
-            b = nn.Parameter(torch.randn(n_head, n, k), requires_grad=True)
+            a = nn.Parameter(torch.randn(n_head, n, k), requires_grad=False)
+            b = nn.Parameter(torch.randn(n_head, n, k), requires_grad=False)
             self.R = torch.matmul(a, b.permute(0,2,1).contiguous())
 
         self.V = nn.Linear(d_model, d_model)
@@ -34,6 +35,6 @@ class RandomSynthesizer(nn.Module):
             v = self.div_and_sort_for_multiheads(self.V(enc_inputs), seq_len)
         else:  # self-attention
             v = self.div_and_sort_for_multiheads(self.V(emb), seq_len)
-        v = v.transpose(0,2,1,3).contiguous()
+        v = v.permute(0,2,1,3).contiguous()
         # v : [batch_size, n_head, seq_len, d_model//n_head]
-        return self.R, v
+        return self.R.to(v.device), v

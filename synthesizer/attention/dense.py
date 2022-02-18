@@ -27,7 +27,7 @@ class DenseSynthesizer(nn.Module):
         head_div_emb = self.div_and_sort_for_multiheads(emb, seq_len) # [batch_size, seq_len, n_head, d_model//n_head]
 
         # synthesize B_{i,h,l}
-        B = self.W2(self.act(self.W1(head_div_emb))).transpose(0,2,1,3).contiguous()
+        B = self.W2(self.act(self.W1(head_div_emb))).permute(0,2,1,3).contiguous()
         # [batch_size, n_head, seq_len, {seq_len}], {.} is hyper-parameter
 
         if enc_inputs is not None:  # enc-dec attention
@@ -35,6 +35,6 @@ class DenseSynthesizer(nn.Module):
             v = self.div_and_sort_for_multiheads(self.V(enc_inputs), seq_len)
         else:  # self-attention
             v = self.div_and_sort_for_multiheads(self.V(emb), seq_len)
-        v = v.transpose(0,2,1,3).contiguous()
+        v = v.permute(0,2,1,3).contiguous()
         # v : [batch_size, n_head, seq_len, d_model//n_head]
         return B, v
