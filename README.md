@@ -28,4 +28,4 @@ ____________
 
 8. [Linear-transformer (On progress)](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linear_transformer)
 
-9. [Synthesizer (On progress)](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/synthesizer)
+9. [Synthesizer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/synthesizer)
