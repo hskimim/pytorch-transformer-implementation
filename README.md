@@ -27,3 +27,5 @@ ____________
 7. [Linformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linformer)
 
 8. [Linear-transformer (On progress)](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linear_transformer)
+
+9. [Synthesizer (On progress)](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/synthesizer)
