@@ -3,8 +3,8 @@ from synthesizer.attention.factorized_dense import FactorizedDenseSynthesizer
 from synthesizer.attention.random import RandomSynthesizer
 from synthesizer.attention.sdp import SynthesizedAttention
 
-from transformer.sublayers.residual_connection import PostProcessing
-from transformer.sublayers.point_wise_ffn import PositionwiseFFN
+from bert.sublayers.residual_connection import PostProcessing
+from bert.sublayers.point_wise_ffn import PositionwiseFFN
 
 class EncoderLayer(nn.Module):
     def __init__(self, d_model,
