@@ -9,9 +9,10 @@ TODO :
     - Write training code for the same model using huggingface library.
     - Work on modules for evaluation metrics such as GLUE and Squard, learn about the metric for each model and develop evaluation
     - When the path of raw text is inserted, it is converted into a format for model training (ex. mlm) and works a pipeline that even trains.
-
+    - Set-up the reproduced experimental example code in the colab environment and share the link
 ____________
-    
+
+### Deployed 
 1. [Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/transformer)
 
 2. [GPT1](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/gpt1)
@@ -22,12 +23,26 @@ ____________
 
 5. [Set-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/set_transformer)
 
-6. [Sparse-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/sparse_transformer)
+6. [Linformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linformer)
 
-7. [Linformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linformer)
+7. [Synthesizer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/synthesizer)
 
-8. [Linear-transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linear_transformer)
+8. [Vision-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/vision_transformer)
 
-9. [Synthesizer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/synthesizer)
+### Working
 
-10. [Vision-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/vision_transformer)
+The list below is for those being implemented or being debugged.
+
+1. [Linear-transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linear_transformer)
+
+2. [Sparse-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/sparse_transformer)
+
+### TODO 
+
+Below is a list of papers that are being read.
+
+- [Transformer Quality in Linear Time](https://arxiv.org/pdf/2202.10447.pdf)
+
+- [cosFormer: Rethinking Softmax in Attention](https://arxiv.org/pdf/2202.08791)
+
+- [Rethinking Attention with Performers](https://arxiv.org/pdf/2009.14794)
