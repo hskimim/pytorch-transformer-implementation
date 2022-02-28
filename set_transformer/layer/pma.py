@@ -8,13 +8,13 @@ class PMA(nn.Module):
     """
     Pooling by Multihead Attention
     """
-    def __init__(self, d_model, d_ff, n_head, k=4, dropout_p=0):
+    def     __init__(self, d_model, d_ff, n_head, ffn_typ, act_typ, k=4, dropout_p=0):
         super().__init__()
 
         self.S = nn.Parameter(torch.randn(k, d_model).unsqueeze(0))
 
-        self.mab1 = MAB(d_model, d_ff, n_head, dropout_p)
-        self.mab2 = MAB(d_model, d_ff, n_head, dropout_p)
+        self.mab1 = MAB(d_model, d_ff, n_head, ffn_typ, act_typ, dropout_p)
+        self.mab2 = MAB(d_model, d_ff, n_head, ffn_typ, act_typ, dropout_p)
         self.r_ff = PositionwiseFFN(d_model, d_ff)
 
     def forward(self, Z, mask_m):

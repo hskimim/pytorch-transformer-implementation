@@ -13,6 +13,8 @@ class EncoderDecoder(nn.Module):
                  src_pad_id,
                  trg_pad_id,
                  d_model,
+                 ffn_typ,
+                 act_typ,
                  d_ff,
                  n_head,
                  dropout_p,
@@ -24,8 +26,8 @@ class EncoderDecoder(nn.Module):
         self.src_embber = InputEmbedding(src_vocab_size, src_seq_length, d_model, src_pad_id)
         self.trg_embber = InputEmbedding(trg_vocab_size, trg_seq_length, d_model, trg_pad_id)
 
-        enc = EncoderLayer(d_model, d_ff, n_head, dropout_p)
-        dec = DecoderLayer(trg_seq_length, d_model, d_ff, n_head, dropout_p)
+        enc = EncoderLayer(d_model, d_ff, n_head, ffn_typ, act_typ, dropout_p)
+        dec = DecoderLayer(d_model, d_ff, n_head, ffn_typ, act_typ, dropout_p)
 
         self.enc = nn.ModuleList([deepcopy(enc) for _ in range(n_enc_layer)])
         self.dec = nn.ModuleList([deepcopy(dec) for _ in range(n_dec_layer)])

@@ -9,7 +9,7 @@ class MAB(nn.Module):
     """
     Multi-head Attention Block
     """
-    def __init__(self, d_model, d_ff, n_head, dropout_p=0):
+    def __init__(self, d_model, d_ff, n_head, ffn_typ, act_typ, dropout_p=0):
         super().__init__()
 
         self.ma1 = MultiHeadAttention(d_model, n_head)
@@ -19,7 +19,7 @@ class MAB(nn.Module):
         self.pp1 = PostProcessing(d_model, dropout_p)
         self.pp2 = PostProcessing(d_model, dropout_p)
 
-        self.positionwise_ffn = PositionwiseFFN(d_model, d_ff)
+        self.positionwise_ffn = PositionwiseFFN(d_model, d_ff, ffn_typ, act_typ)
 
     def forward(self, x, y, mask_m):
         q, k, v = self.ma1(x, y)

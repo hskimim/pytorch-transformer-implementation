@@ -11,6 +11,8 @@ class EncoderDecoder(nn.Module):
                  d_model,
                  d_ff,
                  n_head,
+                 ffn_typ,
+                 act_typ,
                  induc_p,
                  k,
                  pad_idx,
@@ -21,9 +23,9 @@ class EncoderDecoder(nn.Module):
         super().__init__()
 
         self.embedder = InputEmbedding(d_model, pad_idx)
-        enc = ISAB(d_model, d_ff, n_head, induc_p, dropout_p)
+        enc = ISAB(d_model, d_ff, n_head, ffn_typ, act_typ, induc_p, dropout_p)
         self.enc = nn.ModuleList([deepcopy(enc) for _ in range(n_enc_layer)])
-        self.dec = PMA(d_model, d_ff, n_head, k, dropout_p)
+        self.dec = PMA(d_model, d_ff, n_head, ffn_typ, act_typ, k, dropout_p)
         self.fc = nn.Linear(d_model, output_dim)
 
     def forward(self, input_set):

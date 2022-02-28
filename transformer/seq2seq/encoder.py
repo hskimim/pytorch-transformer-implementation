@@ -5,7 +5,7 @@ from transformer.sublayers.residual_connection import PostProcessing
 from transformer.sublayers.point_wise_ffn import PositionwiseFFN
 
 class EncoderLayer(nn.Module):
-    def __init__(self, d_model, d_ff, n_head, dropout_p):
+    def __init__(self, d_model, d_ff, n_head, ffn_typ, act_typ, dropout_p):
         super().__init__()
 
         self.ma = MultiHeadAttention(d_model, n_head)
@@ -14,7 +14,7 @@ class EncoderLayer(nn.Module):
         self.pp1 = PostProcessing(d_model, dropout_p)
         self.pp2 = PostProcessing(d_model, dropout_p)
 
-        self.positionwise_ffn = PositionwiseFFN(d_model, d_ff)
+        self.positionwise_ffn = PositionwiseFFN(d_model, d_ff, ffn_typ, act_typ)
 
     def forward(self, emb, mask_m):
         q, k, v = self.ma(emb)

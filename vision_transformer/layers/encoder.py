@@ -4,14 +4,14 @@ from transformer.attention.mult_head_attn import MultiHeadAttention
 from transformer.sublayers.point_wise_ffn import PositionwiseFFN
 
 class EncoderLayer(nn.Module):
-    def __init__(self, d_model, d_ff, n_head, dropout_p):
+    def __init__(self, d_model, d_ff, n_head, ffn_typ, act_typ, dropout_p):
         super().__init__()
 
         self.ma = MultiHeadAttention(d_model, n_head)
         self.sdp = ScaledDotProductAttention(d_model)
 
         self.ln = nn.LayerNorm(d_model)
-        self.positionwise_ffn = PositionwiseFFN(d_model, d_ff)
+        self.positionwise_ffn = PositionwiseFFN(d_model, d_ff, ffn_typ, act_typ)
 
         self.dp1 = nn.Dropout(dropout_p)
         self.dp2 = nn.Dropout(dropout_p)

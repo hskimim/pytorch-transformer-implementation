@@ -10,6 +10,8 @@ class ViT(nn.Module):
                  patch,
                  d_model,
                  d_ff,
+                 ffn_typ,
+                 act_typ,
                  n_head,
                  dropout_p,
                  n_enc_layer,
@@ -27,6 +29,8 @@ class ViT(nn.Module):
             d_model,
             d_ff,
             n_head,
+            ffn_typ,
+            act_typ,
             dropout_p
         )
         self.enc = nn.ModuleList([deepcopy(enc) for _ in range(n_enc_layer)])
