@@ -5,7 +5,7 @@ import warnings
 from tqdm import tqdm
 import torch
 import torchvision.transforms as transforms
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 from PIL import Image
 
 
@@ -17,7 +17,7 @@ class ImageNetIterator(Dataset):
                  is_train=True,
                  in_memory=False,
                  verbose=False):
-
+        super().__init__()
         self.root = os.path.join(root, 'train') if is_train else os.path.join(root, 'valid')
         self.h = height
         self.w = width
@@ -53,12 +53,13 @@ class ImageNetIterator(Dataset):
     def _convert_jpg_to_tensor(self, fname):
         img = Image.open(fname).convert('RGB')
 
-        resize = transforms.Resize([self.h, self.w])
-        img = resize(img)
+        transformer = transforms.Compose([
+            transforms.Resize([self.h, self.w]),
+            transforms.RandAugment(),
+            transforms.ToTensor(),
+        ])
 
-        to_tensor = transforms.ToTensor()
-        tensor = to_tensor(img)
-        tensor = tensor
+        tensor = transformer(img)
         return tensor
 
     def __len__(self):
