@@ -12,7 +12,7 @@ TODO :
     - Set-up the reproduced experimental example code in the colab environment and share the link
 ____________
 
-### Deployed 
+### Deployed    
 1. [Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/transformer)
     - [GLU variants](https://arxiv.org/pdf/2002.05202.pdf) are supported in point-wise feed forward network
 2. [GPT1](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/gpt1)
@@ -36,6 +36,8 @@ The list below is for those being implemented or being debugged.
 1. [Linear-transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/linear_transformer)
 
 2. [Sparse-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/sparse_transformer)
+
+3. [DeiT](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/deit)
 
 ### TODO 
 
