@@ -15,6 +15,7 @@ ____________
 ### Deployed    
 1. [Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/transformer)
     - [GLU variants](https://arxiv.org/pdf/2002.05202.pdf) are supported in point-wise feed forward network
+        
 2. [GPT1](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/gpt1)
 
 3. [BERT](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/bert)
@@ -38,6 +39,8 @@ The list below is for those being implemented or being debugged.
 2. [Sparse-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/sparse_transformer)
 
 3. [DeiT](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/deit)
+
+4. [MAE](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/mae)
 
 ### TODO 
 
