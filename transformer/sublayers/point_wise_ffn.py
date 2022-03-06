@@ -28,7 +28,7 @@ class PositionwiseFFN(nn.Module):
 class FFN(nn.Module) :
     def __init__(self, d_model,
                  d_ff,
-                 act=nn.RELU()):
+                 act=nn.ReLU()):
         super().__init__()
         self.fc1 = nn.Linear(d_model, d_ff)
         self.fc2 = nn.Linear(d_ff, d_model)
@@ -41,7 +41,7 @@ class FFN(nn.Module) :
 class GLUFFN(FFN) :
     def __init__(self, d_model,
                  d_ff,
-                 act=nn.RELU()):
+                 act=nn.ReLU()):
         super().__init__(d_model, d_ff, act)
         self.fc3 = nn.Linear(d_ff, d_model)
 

@@ -9,7 +9,7 @@ class NoPreparedFFNError(Exception) :
 act_container = \
     {
         'Linear' : nn.Identity(),
-        'ReLU': nn.RELU(),
-        'GELU' : nn.RELU(),
+        'ReLU': nn.ReLU(),
+        'GELU' : nn.GELU(),
         'Swish' : nn.SiLU(),
 }
