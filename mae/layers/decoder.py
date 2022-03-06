@@ -11,13 +11,11 @@ class Decoder(nn.Module):
                  ffn_typ,
                  act_typ,
                  n_head,
-                 seq_length,
                  dropout_p,
                  n_dec_layer):
         super().__init__()
 
-        self.seq_length = seq_length
-        self.mask_tok = nn.Paraameter(torch.randn(1, d_model), requires_grad=True)
+        self.mask_tok = nn.Parameter(torch.randn(1, 1, d_model), requires_grad=True)
 
         enc = EncoderBlock(
             d_model,
@@ -30,16 +28,9 @@ class Decoder(nn.Module):
         self.enc = nn.ModuleList([deepcopy(enc) for _ in range(n_dec_layer)])
 
     def forward(self, z, unmask_bool):
-        mem = []
-        cnt = 0
-        for idx in unmask_bool:
-            if idx.item() is True:  # unmask
-                mem.append(z[:, cnt].unsqueeze(1))
-                cnt += 1
-            else:
-                mem.append(self.mask_tok.unsqueeze(0).repeat(z.shape[0], 1, 1))
-        z = torch.cat(mem, dim=1) # [batch-size, seq-length, hidden-dim]
+        unshuffled = self.mask_tok.repeat(unmask_bool.shape[0], unmask_bool.shape[1], 1) # [batch-size, seq-length, d-model]
+        unshuffled[unmask_bool] = z.view(-1, z.shape[-1])
 
         for enc_layer in self.enc:
-            z = enc_layer(z)  # [batch_size, seq_length, d_model]
-        return z
+            unshuffled = enc_layer(unshuffled)  # [batch_size, seq_length, d_model]
+        return unshuffled

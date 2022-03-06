@@ -14,7 +14,6 @@ class Encoder(nn.Module):
                  d_ff,
                  ffn_typ,
                  act_typ,
-                 mask_ratio,
                  n_head,
                  dropout_p,
                  n_enc_layer):
@@ -26,7 +25,6 @@ class Encoder(nn.Module):
             width,
             channel,
             patch,
-            mask_ratio,
             d_model
         )
         enc = EncoderBlock(

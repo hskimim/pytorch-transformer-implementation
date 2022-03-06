@@ -27,7 +27,7 @@ class PatchEmbedding(nn.Module):
 
         projected = self.patch_emb(masked_tensor)  # [N, sequence length, d_model]
 
-        pos = torch.arange(0, seq_length + 1)\
+        pos = torch.arange(0, seq_length)\
             .unsqueeze(0).repeat(batch_size, 1).to(projected.device)
 
         summed = projected + self.pos_emb(pos)  # [N, sequence length * mask_ratio, d_model]
