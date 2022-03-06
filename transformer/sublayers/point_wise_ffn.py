@@ -43,6 +43,7 @@ class GLUFFN(FFN) :
                  d_ff,
                  act=nn.ReLU()):
         super().__init__(d_model, d_ff, act)
+        self.fc2 = nn.Linear(d_model, d_ff)
         self.fc3 = nn.Linear(d_ff, d_model)
 
     def forward(self, x):
