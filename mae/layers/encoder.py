@@ -2,7 +2,7 @@ from copy import deepcopy
 import torch.nn as nn
 
 from mae.patch_embedding.input_embedding import PatchEmbedding
-from mae.layers.encoder_block import EncoderBlock
+from mae.layers.vit_block import EncoderBlock
 
 class Encoder(nn.Module):
     def __init__(self,
@@ -39,10 +39,10 @@ class Encoder(nn.Module):
         )
         self.enc = nn.ModuleList([deepcopy(enc) for _ in range(n_enc_layer)])
 
-    def forward(self, img):
-        emb, unmask_bool = self.patch_embedding(img)
+    def forward(self, masked_img):
+        emb = self.patch_embedding(masked_img)
 
         for enc_layer in self.enc:
             emb = enc_layer(emb) # [batch_size, seq_length, d_model]
 
-        return emb, unmask_bool
+        return emb
