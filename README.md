@@ -30,6 +30,8 @@ ____________
 
 8. [Vision-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/vision_transformer)
 
+9. [MAE](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/mae)
+
 ### Working
 
 The list below is for those being implemented or being debugged.
@@ -39,8 +41,6 @@ The list below is for those being implemented or being debugged.
 2. [Sparse-Transformer](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/sparse_transformer)
 
 3. [DeiT](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/deit)
-
-4. [MAE](https://github.com/hskimim/pytorch-transformer-implementation/tree/master/mae)
 
 ### TODO 
 
