@@ -14,6 +14,8 @@ class PatchEmbedding(VitEmbedding) :
                          channel,
                          patch,
                          d_model)
+
+        self.pos_emb = nn.Embedding(self.seq_length + 2, d_model)
         self.distil_tok = nn.Parameter(torch.randn(1, d_model), requires_grad=True)
 
     def forward(self, img):
@@ -31,7 +33,7 @@ class PatchEmbedding(VitEmbedding) :
         projected = self.patch_emb(stacked_tensor)  # [N, sequence length, d_model]
         cated = torch.cat([cls_tok, projected, distil_tok], dim=1)  # [N, sequence length + 2, d_model]
 
-        pos = torch.arange(0, self.seq_length + 1).unsqueeze(0).repeat(N, 1).to(cated.device)
+        pos = torch.arange(0, self.seq_length + 2).unsqueeze(0).repeat(N, 1).to(cated.device)
         summed = cated + self.pos_emb(pos)  # [N, sequence length + 1, d_model]
 
         return self.ln(summed)  # according to paper, input of MSA is normalized with layer axis

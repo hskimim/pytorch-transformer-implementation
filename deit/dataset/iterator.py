@@ -4,11 +4,7 @@ import itertools
 import warnings
 from tqdm import tqdm
 import torch
-import torchvision.transforms as transforms
 import torchvision.models as models
-from torch.utils.data import Dataset
-from PIL import Image
-
 from vision_transformer.dataset.iterator import ImageNetIterator
 
 class DistilationImageNetIterator(ImageNetIterator):
@@ -19,15 +15,17 @@ class DistilationImageNetIterator(ImageNetIterator):
                  is_train=True,
                  in_memory=False,
                  verbose=False,
-                 teacher=models.resnet18(),
+                 teacher=models.resnet18(True),
                  distil_method='hard',
                  device=None):
+
         super().__init__(root,
                          height,
                          width,
                          is_train,
                          in_memory,
                          verbose)
+
         assert distil_method in {'hard', 'soft'}, "distil_method in {'hard', 'soft'}"
         self.distil_method = distil_method
         if device is None :
@@ -45,9 +43,15 @@ class DistilationImageNetIterator(ImageNetIterator):
         else:
             x, y = self.cache_x[idx], self.cache_y[idx]
 
-        predict = self.teacher(x.to(self.device))
+        predict = self.teacher(x.unsqueeze(0).to(self.device))
+
         if self.distil_method == 'hard':
-            d = predict.argmax(0)
+            d = predict.argmax(1)
         else:
             d = torch.softmax(predict, dim=1)
-        return x, y, d
+
+        return {
+            'input' : x,
+            'label' : y,
+            'distil_label' : d,
+        }
